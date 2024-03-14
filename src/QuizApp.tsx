@@ -20,10 +20,12 @@ const QuizApp = () => {
   const [countCorrects, setCountCorrect] = useState(0);
   const [countIncorrect, setCountIncorrect] = useState(0);
   const [questionNumber, setQuestionNumber] = useState(0);
+  const [loading, setLoading] = useState(false);
 
   const generateQuiz = async () => {
     setQuiz([]);
     setCountCorrect(0);
+    setLoading(true);
     try {
       const prompt = `Generate a JSON array of 10 multiple-choice questions with 4 options and 1 correct answer based on the following topic: ${topic} use this format 
         [
@@ -54,6 +56,7 @@ const QuizApp = () => {
     } catch (error) {
       console.error("Error generating quiz:", error);
     }
+    setLoading(false);
   };
 
   const handleSubmit = async (e: React.FormEvent) => {
@@ -78,6 +81,7 @@ const QuizApp = () => {
           <p className="mb-4 text-center">Enter the topics and get questions</p>
           <div className="flex justify-center items-center w-full ">
             <Input
+              isDisabled={loading}
               isClearable
               size="lg"
               className="mr-2 max-w-xl"
@@ -90,14 +94,20 @@ const QuizApp = () => {
               maxLength={100}
               placeholder="Enter the topic"
             />
-            <Button isIconOnly color="primary" type="submit">
+            <Button
+              isDisabled={loading}
+              isLoading={loading}
+              isIconOnly
+              color="primary"
+              type="submit"
+            >
               <svg
                 xmlns="http://www.w3.org/2000/svg"
                 fill="none"
                 viewBox="0 0 24 24"
                 strokeWidth={1.5}
                 stroke="currentColor"
-                className="w-6 h-6"
+                className={`${loading === true ? "invisible" : ""} w-6 h-6`}
               >
                 <path
                   strokeLinecap="round"
